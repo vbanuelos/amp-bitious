@@ -26,7 +26,7 @@ const TelLink = styled.a`
 const Navbar = () => {
   return (
     <Menu style={{ backgroundColor: 'black', color: "white", borderRadius: 0}}>
-      <Container basic>
+      <Container>
         <Menu.Item header style={HeaderMenuItemStyle}>Amp-bitious</Menu.Item>
         <Menu.Item style={WhiteMenuItemStyle} position="right">
           <TelLink href="tel:3232435319">
