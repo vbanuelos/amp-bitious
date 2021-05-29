@@ -2,6 +2,9 @@ module.exports = {
   siteMetadata: {
     title: "amp-bitious",
   },
+  siteMetadata: {
+    siteUrl: `https://www.test.com`
+  },
   plugins: [
     "gatsby-plugin-netlify-cms",
     "gatsby-plugin-styled-components",
