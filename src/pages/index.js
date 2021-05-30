@@ -1,5 +1,6 @@
 import React from "react";
-import { Grid, Header, Image } from "semantic-ui-react";
+import { graphql } from "gatsby";
+import { Grid, Header, Image, Icon } from "semantic-ui-react";
 import Navbar from "../components/Navbar";
 import ContentSegment from "../components/ContentSegment";
 import heroImg from "/src/images/banner-commercial.jpg";
@@ -30,6 +31,30 @@ const dataToGrid = (leftData, rightData) => {
   );
 };
 
+
+const yelpRatingToStars = (rating) => {
+  let starArray = [];
+  const ratingFloor = Math.floor(rating);
+  const ratingCeil = Math.ceil(rating);
+  
+  for (let i = 0; i < ratingFloor; i++) {
+    starArray.push(<Icon name="star" color='yellow' />);
+  }
+
+  if (ratingFloor !== ratingCeil) {
+    starArray.push(<Icon.Group size="medium">
+      <Icon name="star outline " color='yellow' />
+      <Icon name="star half" color='yellow' />
+    </Icon.Group>);
+  }
+
+  return (
+    <>
+      {starArray}
+    </>
+  );
+}
+
 const openTill = () => {
   const today = new Date();
   let day = today.getDay();
@@ -38,7 +63,7 @@ const openTill = () => {
   else { return "3pm" }
 }
 
-const homepage = () => {
+const index = ({data}) => {
   return (
     <>
       <Navbar />
@@ -59,7 +84,12 @@ const homepage = () => {
         </div>
       </ContentSegment>
       <ContentSegment id="reviews" showDivider={true}>
-        add yelp reviews
+        add yelp reviews 
+        <div>
+          <div>yelp rating {yelpRatingToStars(data.yelpBusinessDetails.rating)}</div>
+          <div>yelp review count {data.yelpBusinessDetails.review_count}</div>
+          <div><a href={data.yelpBusinessDetails.url}>yelp url</a></div>
+        </div>
       </ContentSegment>
       <ContentSegment id="gallery" showDivider={true}>
         add gallery
@@ -92,4 +122,17 @@ const homepage = () => {
   );
 };
 
-export default homepage;
+export const query = graphql`
+  query indexQuery {
+    yelpBusinessDetails {
+      name
+      rating
+      review_count
+      url
+      phone
+      photos
+    }
+  }
+`;
+
+export default index;

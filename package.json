@@ -15,6 +15,7 @@
     "clean": "gatsby clean"
   },
   "dependencies": {
+    "@leomanlapera/gatsby-source-yelp": "^1.0.2",
     "babel-plugin-styled-components": "^1.12.0",
     "gatsby": "^3.4.1",
     "gatsby-plugin-gatsby-cloud": "^2.6.1",
