@@ -1,10 +1,12 @@
 import React from "react";
 import { graphql } from "gatsby";
-import { Grid, Header, Image, Icon } from "semantic-ui-react";
+import { Grid, Header, Image,  Card } from "semantic-ui-react";
 import Navbar from "../components/Navbar";
 import ContentSegment from "../components/ContentSegment";
+import YelpReview from "../components/YelpReview";
 import heroImg from "/src/images/banner-commercial.jpg";
 import adrianImg from "/src/images/adrian2.jpg";
+import { ratingToStars } from "../helpers"
 
 const heroDivStyle = {
   backgroundImage: `url(${heroImg})`,
@@ -31,30 +33,6 @@ const dataToGrid = (leftData, rightData) => {
   );
 };
 
-
-const yelpRatingToStars = (rating) => {
-  let starArray = [];
-  const ratingFloor = Math.floor(rating);
-  const ratingCeil = Math.ceil(rating);
-  
-  for (let i = 0; i < ratingFloor; i++) {
-    starArray.push(<Icon name="star" color='yellow' />);
-  }
-
-  if (ratingFloor !== ratingCeil) {
-    starArray.push(<Icon.Group size="medium">
-      <Icon name="star outline " color='yellow' />
-      <Icon name="star half" color='yellow' />
-    </Icon.Group>);
-  }
-
-  return (
-    <>
-      {starArray}
-    </>
-  );
-}
-
 const openTill = () => {
   const today = new Date();
   let day = today.getDay();
@@ -64,6 +42,7 @@ const openTill = () => {
 }
 
 const index = ({data}) => {
+  console.log(data)
   return (
     <>
       <Navbar />
@@ -84,12 +63,14 @@ const index = ({data}) => {
         </div>
       </ContentSegment>
       <ContentSegment id="reviews" showDivider={true}>
-        add yelp reviews 
-        <div>
-          <div>yelp rating {yelpRatingToStars(data.yelpBusinessDetails.rating)}</div>
-          <div>yelp review count {data.yelpBusinessDetails.review_count}</div>
-          <div><a href={data.yelpBusinessDetails.url}>yelp url</a></div>
-        </div>
+        <Header as="h1">Reviews</Header>
+        
+        <div>Yelp Rating {ratingToStars(data.yelpBusinessDetails.rating)}</div>
+        <div><a href={data.yelpBusinessDetails.url}>Yelp Page</a></div>
+
+        <Card.Group>
+          {data.allYelpBusinessReview.nodes.map(review => YelpReview(review))}
+        </Card.Group>
       </ContentSegment>
       <ContentSegment id="gallery" showDivider={true}>
         add gallery
@@ -131,6 +112,17 @@ export const query = graphql`
       url
       phone
       photos
+    }
+    allYelpBusinessReview {
+      nodes {
+        id
+        text
+        rating
+        user {
+          name
+          profile_url
+        }
+      }
     }
   }
 `;
